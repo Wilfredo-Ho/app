@@ -16,7 +16,7 @@ Vue.use(VueResource)
 
 let router = new VueRouter({
   linkActiveClass: 'active',
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
       path: '/',
