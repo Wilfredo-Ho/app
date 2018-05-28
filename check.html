@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+	<title></title>
+	<style>
+		*{margin:0;padding:0}
+		body{font-family:"Microsoft YaHei","微软雅黑",SimSun,"宋体",sans-serif}
+		.container{width:800px;margin:0 auto}
+		.title{font-size:60px;color:green;margin:100px 0}
+		.search-wpt{margin-bottom:50px}
+		.search-wpt select{width:20%;height:60px;font-size:40px;border:1px solid #21563d;border-radius:10px;vertical-align:top}
+		button{background-color:green;padding:0 20px;border:1px solid #21563d;border-radius:10px;color:#fff;font-size:25px}
+		.search-wpt button{width:30%;height:60px;line-height:60px;padding-left:4%}
+		.search-now{width:100%;margin-bottom:50px}
+		.search-now button{width:100%;height:80px;line-height:80px}
+		.result{width:100%;padding:20px;border:1px solid #aaa;border-radius:10px;margin-top:10px;font-size:40px;color:#000}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h3 class="title">班次查询</h3>
+		<div class="search-wpt">
+			<select name="year" id="year"></select>
+			<select name="month" id="month"></select>
+			<select name="day" id="day"></select>
+			<button type="button" onclick="cc()">搜索</button>
+		</div>
+		<div class="search-now">
+			<button type="button" onclick="checknow()">查询当天</button>
+		</div>
+		<div class="result">
+			<p id="showInfo">请输入查询条件</p>
+		</div>
+	</div>
+	<script src="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+	var currentDay = moment("2018-5-24");
+	var currentWork = 0;	//夜班
+	var workArr = ["一天一宿", "夜班", "休息"];
+	document.getElementById("year").innerHTML = generateOptions(2018, new Date().getFullYear());
+	document.getElementById("month").innerHTML = generateOptions(1, 12);
+	document.getElementById("day").innerHTML = generateOptions(1, 31);
+
+	function generateOptions(min, max){
+		var currentVal = min;
+		var str = "";
+		while(currentVal <= max) {
+			str += "<option value=" + currentVal +">" + currentVal + "</option>";
+			currentVal ++;
+		}
+		return str;
+	}
+
+	function cc() {
+		var year = document.getElementById("year").value;
+		var month = document.getElementById("month").value;
+		var day = document.getElementById("day").value;
+		var now = moment(year + "-" + month + "-" + day);
+
+		var diffDays = now.diff(currentDay, 'days');
+		var noWork = "";
+		if (diffDays >= 0) {
+			noWork = workArr[diffDays % 3];
+		} else {
+			noWork = workArr[diffDays % 3 + 3];
+		}
+		document.getElementById("showInfo").innerHTML = year + "-" + month + "-" + day + ": " + noWork;
+	}
+
+	function checknow(){
+		var now = moment(new Date());
+
+		var diffDays = now.diff(currentDay, 'days')
+		var noWork = workArr[diffDays % 3];
+		document.getElementById("showInfo").innerHTML = "今天：" + noWork;
+	}
+</script>
